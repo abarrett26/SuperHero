@@ -13,14 +13,14 @@ import java.util.Objects;
  * @author alexbarrett
  */
 public class Location {
-    
-   Integer locationId;
-   String locationName;
-    String description;
-    String address;
-   Double lat;
-    Double lng;
-    List<Sighting> sighting;
+
+    private Integer locationId;
+    private String locationName;
+    private String description;
+    private String address;
+    private Double lat;
+    private Double lng;
+    private List<Sighting> sighting;
 
     @Override
     public int hashCode() {
@@ -123,6 +123,5 @@ public class Location {
     public void setSighting(List<Sighting> sighting) {
         this.sighting = sighting;
     }
-    
-        
+
 }

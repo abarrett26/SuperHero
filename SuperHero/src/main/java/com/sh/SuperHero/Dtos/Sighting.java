@@ -8,43 +8,53 @@ package com.sh.SuperHero.Dtos;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.validation.constraints.PastOrPresent;
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  *
  * @author alexbarrett
  */
 public class Sighting {
-    
-    Integer sightingId;
+
+    private Integer sightingId;
+    @PastOrPresent(message = "Date must not be in the future")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
-     List<SuperHero> superHeroes;
+    private List<SuperHero> superHeroes;
     private Integer locationId;
-     Location LocOfSighting;
+    private Location LocOfSighting;
+
+    public boolean hasLocation(Integer locationId) {
+        boolean found = LocOfSighting.getLocationId() == locationId;
+        return found;
+    }
     
-    
-    
+   
+
     public boolean hasSuper(Integer superHeroId) {
-       boolean found = false;
-       for (SuperHero toCheck : getSuperHeroes()) {
-           if (toCheck.getSuperHeroId()== superHeroId) {
-               found = true;
-               break;
-           }
-       }
-       return found;
-   }
+        boolean found = false;
+        for (SuperHero toCheck : getSuperHeroes()) {
+            if (toCheck.getSuperHeroId() == superHeroId) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
 
     /**
      * @return the sightingsId
      */
-    public Integer getSightingsId() {
+    public Integer getSightingId() {
         return sightingId;
     }
 
     /**
-     * @param sightingsId the sightingsId to set
+     * @param sightingId the sightingId to set
      */
-    public void setSightingsId(Integer sightingsId) {
-        this.sightingId = sightingsId;
+    public void setSightingId(Integer sightingId) {
+        this.sightingId = sightingId;
     }
 
     /**

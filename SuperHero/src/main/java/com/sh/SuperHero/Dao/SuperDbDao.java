@@ -5,11 +5,11 @@
  */
 package com.sh.SuperHero.Dao;
 
+import com.sh.SuperHero.Dao.OrganizationDbDao.OrganizationMapper;
 import com.sh.SuperHero.Dtos.Organization;
 import com.sh.SuperHero.Dtos.SuperHero;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -48,13 +48,13 @@ public class SuperDbDao implements SuperDao {
     @Override
     public SuperHero getSuperHeroById(Integer superHeroId) throws SuperHeroPersistenceException {
        try {
-            final String SELECT_SUPERHERO_BY_ID = "SELECT * FROM SuperHeros WHERE superHeroId = ?";
-            
-            return jdbc.queryForObject(SELECT_SUPERHERO_BY_ID, new SuperMapper(), superHeroId);
-            
-        } catch (DataAccessException ex) {
-            throw new SuperHeroPersistenceException("Unable to retrieve SuperHeros from database.", ex);
-        }
+           final String GET_SUPERHERO_BY_ID = "SELECT * FROM SuperHeros WHERE superHeroId = ?";
+           SuperHero superHero = jdbc.queryForObject(GET_SUPERHERO_BY_ID, new SuperMapper(), superHeroId);
+           superHero.setOrganizations(getOrganizationsForSuperHeroes(superHeroId));
+           return superHero;
+       } catch (DataAccessException ex) {
+           throw new SuperHeroPersistenceException("Unable to retrieve superhero from database.");
+       }
     }
 
     @Override
@@ -85,10 +85,11 @@ public class SuperDbDao implements SuperDao {
             final String UPDATE_SUPERHERO = "UPDATE SuperHeros SET superHeroName = ?, description = ?, superPower = ?"
                     + " WHERE superHeroId = ?";
             jdbc.update(UPDATE_SUPERHERO,
-                    toEdit.getSuperHeroId(),
+                   
                     toEdit.getSuperHeroName(),
                     toEdit.getDescription(),
-                    toEdit.getSuperPower());
+                    toEdit.getSuperPower(),
+                    toEdit.getSuperHeroId());
 
             final String DELETE_SUPERHERO_ORGANIZATIONS = "DELETE FROM superHeroOrganization WHERE superHeroId = ?";
             jdbc.update(DELETE_SUPERHERO_ORGANIZATIONS, toEdit.getSuperHeroId());
@@ -118,23 +119,46 @@ public class SuperDbDao implements SuperDao {
             throw new SuperHeroPersistenceException("Unable to remove SuperHero from database.");
         }
     }
+    
 
-    private void insertSuperHeroOrganization(SuperHero toAdd) throws SuperHeroPersistenceException {
+    private void insertSuperHeroOrganization(SuperHero toEdit) throws SuperHeroPersistenceException {
         try {
            final String INSERT_SUPER_ORGANIZATION = "INSERT INTO "
                    + "superHeroOrganization(organizationId, superHeroId) VALUES(?,?)";
  
-           if (toAdd.getOrganizations() != null) {
-               for (Organization organization : toAdd.getOrganizations()) {
+           if (toEdit.getOrganizations() != null) {
+               for (Organization organization : toEdit.getOrganizations()) {
                    jdbc.update(INSERT_SUPER_ORGANIZATION,
                            organization.getOrganizationId(),
-                           toAdd.getSuperHeroId());
+                           toEdit.getSuperHeroId());
                }
            }
        } catch (DataAccessException ex) {
            throw new SuperHeroPersistenceException("Unable to make updates to database.");
        }
    }
+    
+    
+    private void associateOrganizationToSuperHero(List<SuperHero> AllSupers) throws SuperHeroPersistenceException {
+       try {
+           for (SuperHero superHero : AllSupers) {
+               superHero.setOrganizations(this.getOrganizationsForSuperHeroes(superHero.getSuperHeroId()));
+           }
+       } catch (DataAccessException ex) {
+           throw new SuperHeroPersistenceException("Unable to add orgs to super in database.");
+       }
+   }
+
+    @Override
+    public List<Organization> getOrganizationsForSuperHeroes(Integer superHeroId) throws SuperHeroPersistenceException {
+        try {
+           final String SELECT_ORGANIZATION_FOR_SUPERHERO = "SELECT o.* FROM Organizations o "
+                   + " JOIN superHeroOrganization sho ON sho.organizationId = o.organizationId WHERE sho.superHeroId = ?";
+           return jdbc.query(SELECT_ORGANIZATION_FOR_SUPERHERO, new OrganizationMapper(), superHeroId);
+       } catch (DataAccessException ex) {
+           throw new SuperHeroPersistenceException("Unable to retrieve organizations from database.");
+       }
+    }
 
    
    public static final class SuperMapper implements RowMapper<SuperHero> {

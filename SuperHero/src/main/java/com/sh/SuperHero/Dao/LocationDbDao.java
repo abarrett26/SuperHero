@@ -51,12 +51,6 @@ public class LocationDbDao implements LocationDao{
            throw new LocationPersistenceException("Unable to retrieve locations from database");
        }
    }
-
-    @Override
-    public List<Location> getAllLocationsByUserId(Integer userId) throws LocationPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     @Override
     @Transactional
     public Location addLocation(Location toAdd) throws LocationPersistenceException {
@@ -90,11 +84,6 @@ public class LocationDbDao implements LocationDao{
                    toEdit.getLat(),
                    toEdit.getLng(),
                    toEdit.getLocationId());
- 
-//            final String DELETE_SIGHTING = "DELETE FROM sighting WHERE locationId = ?";
-//            jdbc.update(DELETE_SIGHTING, toEdit.getLocationId());
-//            insertSightingLocation(toEdit);
- 
        } catch (DataAccessException ex) {
            throw new LocationPersistenceException("Unable to write updated location to database.");
        }
@@ -107,7 +96,7 @@ public class LocationDbDao implements LocationDao{
                    + "WHERE locationId = ?";
            jdbc.update(DELETE_SIGHTING, locationId);
  
-           final String DELETE_LOCATION = "DELETE FROM locations WHERE locationId = ?";
+           final String DELETE_LOCATION = "DELETE FROM Locations WHERE locationId = ?";
            jdbc.update(DELETE_LOCATION, locationId);
        } catch (DataAccessException ex) {
            throw new LocationPersistenceException("Unable to delete location from database");

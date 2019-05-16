@@ -13,12 +13,10 @@ import java.util.List;
  * @author alexbarrett
  */
 public interface OrganizationDao {
-    
+
     Organization getOrganizationById(Integer organizationId) throws OrganizationPersistenceException;
 
     List<Organization> getAllOrganizations() throws OrganizationPersistenceException;
-
-    List<Organization> getAllOrganizationsByUserId(Integer userId) throws OrganizationPersistenceException;
 
     Organization addOrganization(Organization toAdd) throws OrganizationPersistenceException;
 

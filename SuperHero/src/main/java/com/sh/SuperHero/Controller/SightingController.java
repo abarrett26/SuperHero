@@ -48,7 +48,7 @@ public class SightingController {
         model.addAttribute("sighting", sightingResponse.getResponseData());
         model.addAttribute("superHero", superHeroResponse.getResponseData());
         model.addAttribute("location", locationResponse.getResponseData());
-        
+
         return "sighting";
     }
 
@@ -58,94 +58,93 @@ public class SightingController {
         model.addAttribute("sighting", response.getResponseData());
         return "displaySighting";
     }
-    
+
     @PostMapping("addSighting")
-   public String addSighting(AddSightingViewModel vm, Model model) {
-       Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
-       violations = validate.validate(vm.getSighting());
-       String toReturn = "";
-       if (violations.isEmpty()) {
-           List<SuperHero> selectedSuperHeroes = new ArrayList<SuperHero>();
-           Integer[] selectedIds = vm.getSelectedSuperHeroIds();
-           if (selectedIds == null) {
-           } else {
-               for (int i = 0; i < vm.getSelectedSuperHeroIds().length; i++) {
-                   int superHeroId = selectedIds[i];
-                   Response<SuperHero> superHeroResponse = service.getSuperHeroById(superHeroId);
-                   selectedSuperHeroes.add(superHeroResponse.getResponseData());
-               }
-           }
- 
-           Response<Location> locationResponse = service.getLocationById(vm.getSighting().getLocationId());
-           Location locationAdd = locationResponse.getResponseData();
- 
-           vm.getSighting().setSuperHeroes(selectedSuperHeroes);
-           vm.getSighting().setLocOfSighting(locationAdd);
- 
-           Response<Sighting> addResponse = service.addSighting(vm.getSighting());
-       } else {
-           model.addAttribute("Date", vm.getSighting().getDate());
-           model.addAttribute("allSuperHeroes", vm.getSighting().getSuperHeroes());
-           model.addAttribute("locationId", vm.getSighting().getLocationId());
-       }
-       model.addAttribute("errors", violations);
-       toReturn = displaySightings(model);
-       return toReturn;
-   }
-   
-   @GetMapping("editSighting/{sightingId}")
-   public String editSighting(@PathVariable Integer sightingId, Model model) {
-       EditSightingViewModel vm = new EditSightingViewModel();
-       Response<List<SuperHero>> allSupers = service.getAllSuperHeroes();
-       Response<List<Location>> allLocations = service.getAllLocations();
-       Response<Sighting> toEdit = service.getSightingsById(sightingId);
- 
-       vm.setSighting(toEdit.getResponseData());
-       vm.setAllLocations(allLocations.getResponseData());
-       vm.setAllSuperHeroes(allSupers.getResponseData());
- 
-       model.addAttribute("vm", vm);
- 
-       return "editSighting";
-   }
-   
-   @PostMapping("editSighting")
-   public String editSighting(EditSightingViewModel vm, Model model) {
-       Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
-       Set<ConstraintViolation<Sighting>> validationFailures = validate.validate(vm.getSighting());
-       model.addAttribute("errors", validationFailures);
- 
-       if (validationFailures.isEmpty()) {
-           List<SuperHero> selectedSuperHeroes = new ArrayList<SuperHero>();
-           Integer[] selectedSuperHeroIds = vm.getSelectedSuperHeroIds();
-           Response<Location> selectedLocation = new Response<Location>();
-           Integer selectedLocationId = vm.getSighting().getLocationId();
- 
-           if (selectedSuperHeroIds != null && selectedLocationId != null) {
-               for (int i = 0; i < selectedSuperHeroIds.length; i++) {
-                   Integer superId = selectedSuperHeroIds[i];
-                   Response<SuperHero> getSuperResponse = service.getSuperHeroById(superId);
-                   selectedSuperHeroes.add(getSuperResponse.getResponseData());
-               }
-               vm.getSighting().setSuperHeroes(selectedSuperHeroes);
-               selectedLocation = service.getLocationById(selectedLocationId);
-               vm.getSighting().setLocationId(selectedLocation.getResponseData().getLocationId());
-           }
-           Response<Sighting> editResponse = service.editSighting(vm.getSighting());
-           model.addAttribute("vm", vm);
-           Response<Sighting> response = service.getSightingsById(editResponse.getResponseData().getSightingsId());
-           model.addAttribute("sighting", response.getResponseData());
-           return "redirect:/sighting";
-       } else {
-           return editSighting(vm.getSighting().getSightingsId(), model);
-       }
-   }
-   
-   @GetMapping("deleteSighting")
-   public String deleteSighting(Integer sightingId) {
-       Response<Sighting> response = service.deleteSightingsById(sightingId);
-       return "redirect:/sighting";
-   }
+    public String addSighting(AddSightingViewModel vm, Model model) {
+        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
+        violations = validate.validate(vm.getSighting());
+        String toReturn = "";
+        if (violations.isEmpty()) {
+            List<SuperHero> selectedSuperHeroes = new ArrayList<SuperHero>();
+            Integer[] selectedIds = vm.getSelectedSuperHeroIds();
+            if (selectedIds == null) {
+            } else {
+                for (int i = 0; i < vm.getSelectedSuperHeroIds().length; i++) {
+                    int superHeroId = selectedIds[i];
+                    Response<SuperHero> superHeroResponse = service.getSuperHeroById(superHeroId);
+                    selectedSuperHeroes.add(superHeroResponse.getResponseData());
+                }
+            }
+
+            Response<Location> locationResponse = service.getLocationById(vm.getSighting().getLocationId());
+            Location locationAdd = locationResponse.getResponseData();
+
+            vm.getSighting().setSuperHeroes(selectedSuperHeroes);
+            vm.getSighting().setLocOfSighting(locationAdd);
+
+            Response<Sighting> addResponse = service.addSighting(vm.getSighting());
+        } else {
+            model.addAttribute("Date", vm.getSighting().getDate());
+            model.addAttribute("allSuperHeroes", vm.getSighting().getSuperHeroes());
+            model.addAttribute("locationId", vm.getSighting().getLocationId());
+        }
+        model.addAttribute("errors", violations);
+        toReturn = displaySightings(model);
+        return toReturn;
+    }
+
+    @GetMapping("editSighting/{sightingId}")
+    public String editSighting(@PathVariable Integer sightingId, Model model) {
+        EditSightingViewModel vm = new EditSightingViewModel();
+        Response<List<SuperHero>> allSuperHeroes = service.getAllSuperHeroes();
+        Response<List<Location>> allLocations = service.getAllLocations();
+        Response<Sighting> toEdit = service.getSightingsById(sightingId);
+
+        vm.setAllSuperHeroes(allSuperHeroes.getResponseData());
+        vm.setAllLocations(allLocations.getResponseData());
+        vm.setSighting(toEdit.getResponseData());
+
+        model.addAttribute("vm", vm);
+
+        return "editSighting";
+    }
+
+    @PostMapping("editSighting")
+    public String editSighting(EditSightingViewModel vm, Model model) {
+        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<Sighting>> validationFailures = validate.validate(vm.getSighting());
+        model.addAttribute("errors", validationFailures);
+
+        if (validationFailures.isEmpty()) {
+            List<SuperHero> selectedSuperHeroes = new ArrayList<SuperHero>();
+            Integer[] selectedSuperHeroIds = vm.getSelectedSuperHeroIds();
+            Response<Location> selectedLocation = new Response<Location>();
+            Integer selectedLocationId = vm.getSighting().getLocationId();
+
+            if (selectedSuperHeroIds != null && selectedLocationId != null) {
+                for (int i = 0; i < selectedSuperHeroIds.length; i++) {
+                    Integer superHeroId = selectedSuperHeroIds[i];
+                    Response<SuperHero> getSuperResponse = service.getSuperHeroById(superHeroId);
+                    selectedSuperHeroes.add(getSuperResponse.getResponseData());
+                }
+                vm.getSighting().setSuperHeroes(selectedSuperHeroes);
+                selectedLocation = service.getLocationById(selectedLocationId);
+                vm.getSighting().setLocationId(selectedLocation.getResponseData().getLocationId());
+                
+            }
+            Response<Sighting> editResponse = service.editSighting(vm.getSighting());
+            model.addAttribute("vm", vm);
+            Response<Sighting> response = service.getSightingsById(editResponse.getResponseData().getSightingId());
+            model.addAttribute("sighting", response.getResponseData());
+            return "redirect:/sighting";
+        } else {
+            return editSighting(vm.getSighting().getSightingId(), model);
+        }
+    }
+
+    @GetMapping("deleteSighting")
+    public String deleteSighting(Integer sightingId) {
+        Response<Sighting> response = service.deleteSightingsById(sightingId);
+        return "redirect:/sighting";
+    }
 }
-
-

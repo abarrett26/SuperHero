@@ -20,8 +20,6 @@ public interface LocationDao {
 
     List<Location> getAllLocations() throws LocationPersistenceException;
 
-    List<Location> getAllLocationsByUserId(Integer userId) throws LocationPersistenceException;
-
     Location addLocation(Location toAdd) throws LocationPersistenceException;
 
     void editLocation(Location toEdit) throws LocationPersistenceException;

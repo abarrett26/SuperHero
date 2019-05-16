@@ -41,8 +41,8 @@ public class OrganizationController {
     @GetMapping("organization")
     public String displayOrganizations(Model model) {
         Response<List<Organization>> organization = service.getAllOrganizations();
-        Response<List<SuperHero>> superHero = service.getAllSuperHeroes();
         model.addAttribute("organization", organization.getResponseData());
+        Response<List<SuperHero>> superHero = service.getAllSuperHeroes();
         model.addAttribute("superHero", superHero.getResponseData());
         return "organization";
     }
@@ -64,8 +64,8 @@ public class OrganizationController {
             Integer[] selectedIds = vm.getSelectedSuperHeroIds();
             if (selectedIds != null) {
                 for (int i = 0; i < vm.getSelectedSuperHeroIds().length; i++) {
-                    int superId = selectedIds[i];
-                    Response<SuperHero> superHeroResponse = service.getSuperHeroById(superId);
+                    int superHeroId = selectedIds[i];
+                    Response<SuperHero> superHeroResponse = service.getSuperHeroById(superHeroId);
                     selectedSuperHeroes.add(superHeroResponse.getResponseData());
                 }
             }
@@ -74,7 +74,7 @@ public class OrganizationController {
 
         } else {
             model.addAttribute("organizationName", vm.getOrganizations().getOrganizationName());
-            model.addAttribute("organizationDescription", vm.getOrganizations().getDescription());
+            model.addAttribute("description", vm.getOrganizations().getDescription());
             model.addAttribute("address", vm.getOrganizations().getAddress());
             model.addAttribute("phoneNumber", vm.getOrganizations().getPhoneNumber());
             model.addAttribute("superHero", vm.getOrganizations().getSuperHeroes());

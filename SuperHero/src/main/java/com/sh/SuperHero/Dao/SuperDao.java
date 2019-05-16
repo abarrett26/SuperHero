@@ -5,6 +5,7 @@
  */
 package com.sh.SuperHero.Dao;
 
+import com.sh.SuperHero.Dtos.Organization;
 import com.sh.SuperHero.Dtos.Sighting;
 import com.sh.SuperHero.Dtos.SuperHero;
 import java.util.List;
@@ -24,4 +25,6 @@ public interface SuperDao {
     void editSuperHero(SuperHero toEdit) throws SuperHeroPersistenceException;
 
     void deleteSuperHeroById(Integer superHeroId) throws SuperHeroPersistenceException;
+
+    List<Organization> getOrganizationsForSuperHeroes(Integer superHeroId) throws SuperHeroPersistenceException;
 }

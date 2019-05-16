@@ -16,7 +16,7 @@ public class EditSuperHeroViewModel {
    
    private Integer[] selectedOrganizationIds;
    private SuperHero superHeroes;
-   private List<Organization> allOrgsanizations;
+   private List<Organization> allOrganizations;
 
     /**
      * @return the selectedOrganizationIds
@@ -49,14 +49,15 @@ public class EditSuperHeroViewModel {
     /**
      * @return the allOrgsanizations
      */
-    public List<Organization> getAllOrgsanizations() {
-        return allOrgsanizations;
+    public List<Organization> getAllOrganizations() {
+        return allOrganizations;
     }
 
     /**
-     * @param allOrgsanizations the allOrgsanizations to set
+     * @param allOrganizations
+   
      */
-    public void setAllOrgsanizations(List<Organization> allOrgsanizations) {
-        this.allOrgsanizations = allOrgsanizations;
+    public void setAllOrganizations(List<Organization> allOrganizations) {
+        this.allOrganizations = allOrganizations;
     }
 }

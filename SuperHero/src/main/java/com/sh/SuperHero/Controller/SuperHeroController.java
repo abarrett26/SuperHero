@@ -41,10 +41,11 @@ public class SuperHeroController {
     @GetMapping("superHero")
     public String displaySuperHeroes(Model model) {
         Response<List<SuperHero>> response = service.getAllSuperHeroes();
-        model.addAttribute("superHero", response.getResponseData());
         Response<List<Organization>> organizations = service.getAllOrganizations();
+        model.addAttribute("superHero", response.getResponseData());
         model.addAttribute("organization", organizations.getResponseData());
         return "superHero";
+        
     }
 
     @GetMapping("displaySuperHero")
@@ -77,7 +78,6 @@ public class SuperHeroController {
             model.addAttribute("superPower", vm.getSuperHeroes().getSuperPower());
             model.addAttribute("organization", vm.getSuperHeroes().getOrganizations());
         }
-
         model.addAttribute("errors", violations);
         toReturn = displaySuperHeroes(model);
         return toReturn;
@@ -91,7 +91,7 @@ public class SuperHeroController {
         Response<List<Organization>> allOrganizations = service.getAllOrganizations();
 
         vm.setSuperHeroes(toEdit.getResponseData());
-        vm.setAllOrgsanizations(allOrganizations.getResponseData());
+        vm.setAllOrganizations(allOrganizations.getResponseData());
 
         model.addAttribute("vm", vm);
 

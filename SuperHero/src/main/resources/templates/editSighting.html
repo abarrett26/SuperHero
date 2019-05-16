@@ -12,7 +12,8 @@
    </head>
    <body>
        <!-- Main Body of Page -->
-       <div class ="col-12 m-1 text-center"
+ 
+      <div class ="col-12 m-1 text-center"
              th:if="${errors!=null && !errors.isEmpty()}">
            <p class="alert alert-danger" th:each="error: ${errors}"
                th:text="${error.message}">Error message!</p>
@@ -20,7 +21,7 @@
        <div class="container">
            <div class="row m-4">
                <div class="col text-center border border-dark">
-                   <h1><a href="/" class="text-dark">Display Location Page</a></h1>
+                   <h1><a href="/" class="text-dark">SuperHero Page!</a></h1>
                </div>
            </div>
            <div class="row m-4 border border-dark">
@@ -40,36 +41,51 @@
                    <a href="sighting" class="btn btn-outline-primary btn-lg">Sighting</a>
                </div>
            </div>  
+ 
            <div class="row m-4 border border-dark">
-               <div class="col-6 text-right"><strong>ID</strong></div>
-               <div class="col-6 text-left">
-                   <span th:text="${location.locationId}"></span>
+               <div class="col-3 text-center m-3">
+                   <span class="h3">Edit Sighting</span>
                </div>
-               <div class="col-6 text-right"><strong>Name</strong></div>
-               <div class="col-6 text-left">
-                   <span th:text="${location.locationName}"></span>
-               </div>
-               <div class="col-6 text-right"><strong>Description</strong></div>
-               <div class="col-6 text-left">
-                   <span th:text="${location.description}"></span>
-               </div>
-               <div class="col-6 text-right"><strong>Address</strong></div>
-               <div class="col-6 text-left">
-                   <span th:text="${location.address}"></span>
-               </div>
-               <div class="col-6 text-right"><strong>Latitude</strong></div>
-               <div class="col-6 text-left">
-                   <span th:text="${location.lat}"></span>
-               </div>
-               <div class="col-6 text-right"><strong>Longitude</strong></div>
-               <div class="col-6 text-left">
-                   <span th:text="${location.lng}"></span>
-               </div>
+               <div class="col-7 text-center m-3">
+                   <form action="/editSighting" method="POST">
+                       sighting
+                       <input type="hidden" name="sightings.sightingId" th:value="${vm.sighting.sightingId}">
+                       <select name="sighting.locationId" th:value="${vm.sighting.locationId}">
+                           <option 
+                                th:each="location : ${vm.allLocations}"
+                                th:value="${location.locationId }"
+                                th:text="${location.locationName}"
+                                th:selected="${vm.sighting.hasLocation(location.locationId)}"
+                                />
+                       </select>
+                        <div class="form-group row">
+                           <label for="date" class="col-3 col-form-label">
+                               Date Of Sighting</label>
+                           <div class="col-9">
+                               <input type="date" name="sighting.date" th:value="${vm.sighting.date}">
+                           </div>
+                       </div>
+
+                       <div class="form-group row text-center">
+                           <label for="superHeroes" class="col-3 col-form-label" >
+                               SuperHeroes </label>
+                           <div class="col-7">
+                               <select multiple name="selectedSuperHeroIds">
+                                   <option
+                                        th:each="superHeroes : ${vm.allSuperHeroes}"
+                                        th:value="${superHeroes.superHeroId}"
+                                        th:text="${superHeroes.superHeroName}"
+                                        th:selected="${vm.sighting.hasSuper(superHeroes.superHeroId)}"
+                                        />
+                               </select>
+                           </div>
+                       </div>
  
-           </div>
  
- 
- 
+                       <button type="submit" class="btn btn-primary">Edit Sighting</button>
+                   </form>
+               </div>
+           </div>  
  
        </div>
  

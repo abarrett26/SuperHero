@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
    <head>
        <!-- Required meta tags -->
@@ -11,19 +11,16 @@
        <title>Superhero Sightings Manager</title>
    </head>
    <body>
-       <!-- Main Body of Page -->     
- 
-       <div class ="col-12 m-1 text-center"
+       <!-- Main Body of Page -->
+  <div class ="col-12 m-1 text-center"
              th:if="${errors!=null && !errors.isEmpty()}">
            <p class="alert alert-danger" th:each="error: ${errors}"
-               th:text="${error.message}">Error message</p>
+               th:text="${error.message}">Error message!</p>
        </div>
- 
        <div class="container">
- 
            <div class="row m-4">
                <div class="col text-center border border-dark">
-                   <h1><a href="/" class="text-dark">Organization Page</a></h1>
+                   <h1><a href="/" class="text-dark">SuperHero Page!</a></h1>
                </div>
            </div>
            <div class="row m-4 border border-dark">
@@ -42,94 +39,83 @@
                <div class="col text-center m-3">
                    <a href="sighting" class="btn btn-outline-primary btn-lg">Sighting</a>
                </div>
-           </div>
-
+           </div> 
            <div class="row m-4 border border-dark">
                <div class="col-3 text-center m-3">
-                   <span class="h3">Add Organization</span>
+                   <span class="h3">Edit organization</span>
                </div>
                <div class="col-7 text-center m-3">
-                   <form action="addOrganization" method="POST">
+                   <form action="/editOrganization" method="POST" th::object="${toEdit}">
  
                        <div class="form-group row">
-                           <label for="organizationName" class="col-3 col-form-label">
-                               Organization Name</label>
                            <div class="col-9">
-                               <input type="text" name="organizations.organizationName" 
-                                       id="organizationName" class="form-control" />
+                               <input type="hidden" name="organizations.organizationId" 
+                                       id="locationId" class="form-control" th:value="${vm.organizations.organizationId}"/>
                            </div>
                        </div>
  
                        <div class="form-group row">
-                           <label for="organizationDescription" class="col-3 col-form-label">
-                               Organization Description</label>
+                           <label for="organizationName" class="col-3 col-form-label">
+                               organization name</label>
+                           <div class="col-9">
+                               <input type="text" name="organizations.organizationName" 
+                                       id="organizationName" class="form-control" th:value="${vm.organizations.organizationName}"/>
+                           </div>
+                       </div>
+                       <a href="displayOrganization.html"></a>
+ 
+                       <div class="form-group row">
+                           <label for="description" class="col-3 col-form-label">
+                               description</label>
                            <div class="col-9">
                                <input type="text" name="organizations.description" 
-                                       id="description" class="form-control" />
+                                       id="description" class="form-control" th:value="${vm.organizations.description}"/>
                            </div>
                        </div>
  
                        <div class="form-group row">
                            <label for="address" class="col-3 col-form-label">
-                              Organization Address</label>
+                               address</label>
                            <div class="col-9">
                                <input type="text" name="organizations.address" 
-                                       id="address" class="form-control" />
+                                       id="address" class="form-control" th:value="${vm.organizations.address}"/>
                            </div>
                        </div>
+ 
                        <div class="form-group row">
                            <label for="phoneNumber" class="col-3 col-form-label">
-                               Organization PhoneNumber</label>
+                               phone number</label>
                            <div class="col-9">
                                <input type="text" name="organizations.phoneNumber" 
-                                       id="phoneNumber" class="form-control" />
+                                       id="phoneNumber" class="form-control" th:value="${vm.organizations.phoneNumber}"/>
                            </div>
                        </div>
+                       <div class="row m-4 border border-dark">
                        <div class="form-group row text-center">
                            <label for="superHero" class="col-3 col-form-label" >
                                SuperHeroes </label>
                            <div class="col-7">
-                               <select multiple name="selectedSuperHeroIds" class="form-control">
+                               <select multiple name="selectedSuperHeroIds">
                                    <option
-                                        th:each="SuperHeros : ${superHero}"
-                                        th:value="${SuperHeros.superHeroId}"
-                                        th:text="${SuperHeros.superHeroName}"></option>
-                                        
+                                        th:each="superHeroes : ${vm.allSuperHeroes}"
+                                        th:value="${superHeroes.superHeroId}"
+                                        th:text="${superHeroes.superHeroName}"
+                                        th:selected="${vm.organizations.hasSuperHero(superHeroes.superHeroId)}"
+                                        />
                                </select>
+                                 <button type="submit" class="btn btn-primary">Edit Organization</button>
                            </div>
                        </div>
-                       <button type="submit" class="btn btn-primary">Add Organization</button>
-                   </form>
+               </div>
+           </div> 
+          
+ 
+ 
+ 
+<!--                       <button type="submit" class="btn btn-primary">Edit Organization</button>-->
+                  
                </div>
            </div>  
-           
-           <div class="row m-4 border border-dark">
-               <div class="col text-center m-3">
-                   <table class="table table-striped">
-                       <thead>
-                           <tr>
-                               <th>Organization ID</th>
-                               <th>Organization Name</th>
-                               <th>Organization Description</th>
-                               <th>Organization Address</th>
-                               <th>Organization PhoneNumbers</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           <tr th:each="Organizations : ${organization}">
-                               <td th:text="${Organizations.organizationId}">Organization ID</td>
-                               <td th:text="${Organizations.organizationName}">Organization Name</td>
-                               <td th:text="${Organizations.description}">Organization Description</td>
-                               <td th:text="${Organizations.address}">Organization Address</td>
-                               <td th:text="${Organizations.phoneNumber}">Organization PhoneNumber</td>
-                               <td><a href="#" th:href="${'/editOrganization/' + Organizations.organizationId}">Edit</a></td>
-                               <td><a href="#" th:href="@{/deleteOrganization(organizationId=${Organizations.organizationId})}">Delete</a></td>
-                               <td><a href="#" th:href="@{/displayOrganization(organizationId=${Organizations.organizationId})}">Details</a></td>
-                           </tr>
-                       </tbody>
-                   </table>
-               </div>
-           </div>
  
        </div>
  

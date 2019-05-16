@@ -202,9 +202,9 @@ public class SHService {
         try {
             List<Organization> allOrganizations = organizationDao.getAllOrganizations();
             validateOrganizationId(organizationId, allOrganizations);
-            Organization singleOrg = organizationDao.getOrganizationById(organizationId);
+            Organization organization = organizationDao.getOrganizationById(organizationId);
             response.setSuccess(true);
-            response.setResponseData(singleOrg);
+            response.setResponseData(organization);
         } catch (OrganizationPersistenceException | InvalidIdException ex) {
             response.setSuccess(false);
             response.setMessage(ex.getMessage());
@@ -248,9 +248,9 @@ public class SHService {
         try {
             List<Sighting> allSightings = sightingDao.getAllSightings();
             validateSightingId(sightingId, allSightings);
-            Sighting singleSighting = sightingDao.getSightingById(sightingId);
+            Sighting sighting = sightingDao.getSightingById(sightingId);
             response.setSuccess(true);
-            response.setResponseData(singleSighting);
+            response.setResponseData(sighting);
         } catch (SightingPersistenceException | InvalidIdException ex) {
             response.setSuccess(false);
             response.setMessage(ex.getMessage());
@@ -274,7 +274,7 @@ public class SHService {
 
     public Response<Sighting> editSighting(Sighting toEdit) {
         Response<Sighting> response = new Response<Sighting>();
-        Integer sightingId = toEdit.getSightingsId();
+        Integer sightingId = toEdit.getSightingId();
         try {
             List<Sighting> allSightings = sightingDao.getAllSightings();
             validateSightingId(sightingId, allSightings);
@@ -307,8 +307,9 @@ public class SHService {
     public Response<Organization> addOrganization(Organization toAdd) {
         Response<Organization> response = new Response<Organization>();
         try {
-            validateOrganization(toAdd);
             toAdd = organizationDao.addOrganization(toAdd);
+            validateOrganization(toAdd);
+          
             response.setSuccess(true);
             response.setResponseData(toAdd);
         } catch (OrganizationPersistenceException | InvalidOrganizationAddressException | InvalidOrganizationDescriptionException | InvalidOrganizationNameException | InvalidOrganizationPhoneNumberException ex) {
@@ -319,8 +320,8 @@ public class SHService {
     }
 
     public Response<Organization> editOrganization(Organization toEdit)  {
-        Response<Organization> response = new Response<Organization>();
         Integer organizationId = toEdit.getOrganizationId();
+        Response<Organization> response = new Response<Organization>();
         try {
             List<Organization> allOrganizations = organizationDao.getAllOrganizations();
             validateOrganizationId(organizationId, allOrganizations);
@@ -378,7 +379,7 @@ public class SHService {
     private void validateSightingId(Integer sightingId, List<Sighting> allSightings) throws InvalidIdException {
         boolean found = false;
         for (Sighting toCheck : allSightings) {
-            if (sightingId == toCheck.getSightingsId()) {
+            if (sightingId == toCheck.getSightingId()) {
                 found = true;
                 break;
             }

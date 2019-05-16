@@ -61,16 +61,16 @@ public class LocationController {
         if (validationFailures.isEmpty()) {
             Response<Location> response = service.addLocation(toAdd);
         } else {
-            model.addAttribute("LocationName", toAdd.getLocationName());
-            model.addAttribute("Descriptions", toAdd.getDescription());
-            model.addAttribute("Address", toAdd.getAddress());
+            model.addAttribute("locationName", toAdd.getLocationName());
+            model.addAttribute("description", toAdd.getDescription());
+            model.addAttribute("address", toAdd.getAddress());
             model.addAttribute("lat", toAdd.getLat());
             model.addAttribute("lng", toAdd.getLng());
         }
         return displayLocations(model);
     }
 
-    @GetMapping("editLocation/{LocationID}")
+    @GetMapping("editLocation/{locationId}")
     public String editLocation(@PathVariable Integer locationId, Model model) {
 
         EditLocationViewModel vm = new EditLocationViewModel();
@@ -94,8 +94,8 @@ public class LocationController {
             Response<Location> editResponse = service.editLocation(vm.getLocation());
             model.addAttribute("vm", vm);
             Response<Location> response = service.getLocationById(editResponse.getResponseData().getLocationId());
-            model.addAttribute("Location", response.getResponseData());
-            return "redirect:/Location";
+            model.addAttribute("location", response.getResponseData());
+            return "redirect:/location";
         } else {
             return editLocation(vm.getLocation().getLocationId(), model);
         }

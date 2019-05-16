@@ -38,9 +38,9 @@ public class SightingDbDao implements SightingDao {
     @Override
     public Sighting getSightingById(Integer sightingId) throws SightingPersistenceException {
         try {
-            final String SELECT_SIGHTING_BY_ID = "SELECT * FROM Sightings WHERE sightingsId = ?";
+            final String SELECT_SIGHTING_BY_ID = "SELECT * FROM Sightings s JOIN Locations l ON s.locationId = l.locationId WHERE sightingId = ?";
             Sighting sighting = jdbc.queryForObject(SELECT_SIGHTING_BY_ID, new SightingMapper(), sightingId);
-            sighting.setSuperHeroes(getSupersForSighting(sighting.getSightingsId()));
+            sighting.setSuperHeroes(getSuperHeroesForSighting(sightingId));
             return sighting;
         } catch (DataAccessException ex) {
             throw new SightingPersistenceException("Unable to retrieve Sighting from database.");
@@ -53,8 +53,9 @@ public class SightingDbDao implements SightingDao {
         try {
             final String SELECT_ALL_SIGHTINGS = "SELECT * FROM Sightings ORDER BY Date asc LIMIT 10";
             allSightings = jdbc.query(SELECT_ALL_SIGHTINGS, new SightingMapper());
-            associateLocationToSighting(allSightings);
+            
             associateSuperHeroesToSightings(allSightings);
+            associateLocationToSighting(allSightings);
             return allSightings;
         } catch (DataAccessException ex) {
             throw new SightingPersistenceException("Unable to retrieve Sighting from database.");
@@ -65,7 +66,7 @@ public class SightingDbDao implements SightingDao {
     public List<Sighting> getAllSightings() throws SightingPersistenceException {
         List<Sighting> allSightings = new ArrayList<>();
         try {
-            final String SELECT_ALL_SIGHTINGS = "SELECT * FROM Sightings";
+            final String SELECT_ALL_SIGHTINGS = "SELECT * FROM Sightings s JOIN Locations l ON s.locationId = l.locationId ORDER BY sightingId asc";
             allSightings = jdbc.query(SELECT_ALL_SIGHTINGS, new SightingMapper());
             associateLocationToSighting(allSightings);
             associateSuperHeroesToSightings(allSightings);
@@ -75,10 +76,6 @@ public class SightingDbDao implements SightingDao {
         }
     }
 
-    @Override
-    public List<Sighting> getAllCharactersByUserId(Integer sightingId) throws SightingPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     @Override
     @Transactional
@@ -91,7 +88,7 @@ public class SightingDbDao implements SightingDao {
                     toAdd.getLocationId());
 
             Integer newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-            toAdd.setSightingsId(newId);
+            toAdd.setSightingId(newId);
             insertSuperHeroSighting(toAdd);
         } catch (DataAccessException ex) {
             throw new SightingPersistenceException("Unable to add Sighting to database.", ex);
@@ -102,15 +99,15 @@ public class SightingDbDao implements SightingDao {
     @Override
     public void editSighting(Sighting toEdit) throws SightingPersistenceException {
         try {
-            final String UPDATE_GAME = "UPDATE Sightings SET Date = ?, locationId = ?, sightingId "
+            final String UPDATE_GAME = "UPDATE Sightings SET Date = ?, locationId = ? "
                     + " WHERE sightingId = ?";
             jdbc.update(UPDATE_GAME,
                     toEdit.getDate(),
                     toEdit.getLocationId(),
-                    toEdit.getSightingsId());
+                    toEdit.getSightingId());
 
             final String DELETE_SUPERHERO_SIGHTING = "DELETE FROM superHeroSighting WHERE sightingId = ?";
-            jdbc.update(DELETE_SUPERHERO_SIGHTING, toEdit.getSightingsId());
+            jdbc.update(DELETE_SUPERHERO_SIGHTING, toEdit.getSightingId());
             insertSuperHeroSighting(toEdit);
         } catch (DataAccessException ex) {
             throw new SightingPersistenceException("Unable to update Sighitng to database.");
@@ -120,7 +117,7 @@ public class SightingDbDao implements SightingDao {
     @Override
     public void deleteSightingById(Integer sightingId) throws SightingPersistenceException {
         try {
-            final String DELETE_SUPER_SIGHITNG= "DELETE FROM superHeroSighting "
+            final String DELETE_SUPER_SIGHITNG = "DELETE FROM superHeroSighting "
                     + " WHERE sightingId = ?";
             jdbc.update(DELETE_SUPER_SIGHITNG, sightingId);
 
@@ -132,78 +129,84 @@ public class SightingDbDao implements SightingDao {
     }
 
     @Override
-    public List<SuperHero> getSupersForSighting(Integer sightingsId) throws SightingPersistenceException {
+    public List<SuperHero> getSuperHeroesForSighting(Integer sightingId) throws SightingPersistenceException {
         try {
-           final String SELECT_SUPERHERO_FOR_SIGHTING = "SELECT s.* FROM SuperHeros s "
-                   + "JOIN superHeroSighting ss ON ss.superHeroId = s.superHeroId WHERE ss.sightingId = ?";
-           return jdbc.query(SELECT_SUPERHERO_FOR_SIGHTING, new SuperMapper(), sightingsId);
-       } catch (DataAccessException ex) {
-           throw new SightingPersistenceException("Unable to retrieve supers from database.");
-       }
-   }
-    
-    
+            final String SELECT_SUPERHERO_FOR_SIGHTING = "SELECT s.* FROM SuperHeros s "
+                    + "JOIN superHeroSighting shs ON shs.superHeroId = s.superHeroId WHERE shs.sightingId = ?";
+            return jdbc.query(SELECT_SUPERHERO_FOR_SIGHTING, new SuperMapper(), sightingId);
+        } catch (DataAccessException ex) {
+            throw new SightingPersistenceException("Unable to retrieve supers from database.");
+        }
+    }
+
     private void associateLocationToSighting(List<Sighting> allSightings) throws SightingPersistenceException {
         try {
             for (Sighting sighting : allSightings) {
-                List<Location> allLocations = getLocationForSighting(sighting.getSightingsId());
+                List<Location> allLocations = getLocationForSighting(sighting.getSightingId());
 
                 for (Location location : allLocations) {
-                    sighting.setSightingsId(location.getLocationId());
+                    sighting.setSightingId(location.getLocationId());
                 }
             }
         } catch (DataAccessException ex) {
             throw new SightingPersistenceException("Unable to find user for character.");
         }
     }
-    
-    
+
     private void associateSuperHeroesToSightings(List<Sighting> allSightings) throws SightingPersistenceException {
         try {
-           for (Sighting sighting : allSightings) {
-               sighting.setSuperHeroes(this.getSupersForSighting(sighting.getSightingsId()));
-           }
-       } catch (DataAccessException ex) {
-           throw new SightingPersistenceException("Unable to add supers to sighting in database.");
-       }
-   }
-    
-    
+            for (Sighting sighting : allSightings) {
+                sighting.setSuperHeroes(this.getSuperHeroesForSighting(sighting.getSightingId()));
+            }
+        } catch (DataAccessException ex) {
+            throw new SightingPersistenceException("Unable to add SuperHeroes to Sightings in database.");
+        }
+    }
+
     private void insertSuperHeroSighting(Sighting toEdit) throws SightingPersistenceException {
         try {
             final String INSERT_SUPERHERO_SIGHTING = "INSERT INTO "
                     + " superHeroSighting(sightingId, superHeroId) VALUES(?,?)";
-            if (toEdit.getSuperHeroes()!= null) {
+            if (toEdit.getSuperHeroes() != null) {
                 for (SuperHero user : toEdit.getSuperHeroes()) {
                     jdbc.update(INSERT_SUPERHERO_SIGHTING,
-                            toEdit.getSightingsId(),
+                            toEdit.getSightingId(),
                             user.getSuperHeroId());
                 }
             }
         } catch (DataAccessException ex) {
-            throw new SightingPersistenceException("Unable to make updates to database.");
+            throw new SightingPersistenceException("unable to insert into database");
         }
     }
 
     private List<Location> getLocationForSighting(Integer sightingsId) throws SightingPersistenceException {
         try {
-           final String SELECT_LOCATION_FOR_SIGHTING = "SELECT * FROM Locations l"
-                   + " JOIN Sightings s ON l.locationId = s.locationId WHERE sightingId = ?";
-           return jdbc.query(SELECT_LOCATION_FOR_SIGHTING, new LocationMapper(), sightingsId);
-       } catch (DataAccessException ex) {
-           throw new SightingPersistenceException("Unable to retrieve Locations from database.");
-       }
-   }
-
+            final String SELECT_LOCATION_FOR_SIGHTING = "SELECT * FROM Locations l"
+                    + " JOIN Sightings s ON l.locationId = s.locationId WHERE sightingId = ?";
+            return jdbc.query(SELECT_LOCATION_FOR_SIGHTING, new LocationMapper(), sightingsId);
+        } catch (DataAccessException ex) {
+            throw new SightingPersistenceException("Unable to retrieve Locations from database.");
+        }
+    }
 
     public static final class SightingMapper implements RowMapper<Sighting> {
 
         @Override
         public Sighting mapRow(ResultSet rs, int i) throws SQLException {
             Sighting sight = new Sighting();
-            sight.setSightingsId(rs.getInt("sightingId"));
-            sight.setDate(rs.getDate("Date").toLocalDate());
+            sight.setSightingId(rs.getInt("sightingId"));
             sight.setLocationId(rs.getInt("locationId"));
+             sight.setDate(rs.getDate("date").toLocalDate());
+            Location LocOfSighting = new Location();
+            LocOfSighting.setLocationId(rs.getInt("locationId"));
+            LocOfSighting.setLocationName(rs.getString("locationName"));
+            LocOfSighting.setDescription(rs.getString("description"));
+            LocOfSighting.setAddress(rs.getString("address"));
+            LocOfSighting.setLat(rs.getDouble("latitude"));
+            LocOfSighting.setLng(rs.getDouble("longitude"));
+            sight.setLocOfSighting(LocOfSighting);
+            
+
             return sight;
         }
     }

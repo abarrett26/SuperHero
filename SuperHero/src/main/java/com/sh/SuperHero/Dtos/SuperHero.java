@@ -13,60 +13,69 @@ import java.util.Objects;
  * @author alexbarrett
  */
 public class SuperHero {
+
+    private Integer superHeroId;
+    private String superHeroName;
+    private String description;
+    private String superPower;
+    private List<Organization> organizations;
+    private List<Sighting> sighting;
     
-    
-     Integer superHeroId;
-    String superHeroName;
-    String description;
-    String superPower;
-     List<Organization> organizations;
-     List<Sighting> sighting;
-    
-    
-   @Override
-   public int hashCode() {
-       int hash = 3;
-       hash = 71 * hash + this.getSuperHeroId();
-       hash = 71 * hash + Objects.hashCode(this.getSuperHeroName());
-       hash = 71 * hash + Objects.hashCode(this.getDescription());
-       hash = 71 * hash + Objects.hashCode(this.getSuperPower());
-       hash = 71 * hash + Objects.hashCode(this.getOrganizations());
-       hash = 71 * hash + Objects.hashCode(this.getSightings());
-       return hash;
+    public boolean hasOrganization (Integer organzationId) {
+       boolean found = false;
+       for ( Organization toCheck : getOrganizations()) {
+           if (toCheck.getOrganizationId()== organzationId) {
+               found = true;
+               break;
+           }
+       }
+       return found;
    }
-   
-   @Override
-   public boolean equals(Object obj) {
-       if (this == obj) {
-           return true;
-       }
-       if (obj == null) {
-           return false;
-       }
-       if (getClass() != obj.getClass()) {
-           return false;
-       }
-       final SuperHero other = (SuperHero) obj;
-       if (this.getSuperHeroId() != other.getSuperHeroId()) {
-           return false;
-       }
-       if (!Objects.equals(this.superHeroName, other.superHeroName)) {
-           return false;
-       }
-       if (!Objects.equals(this.description, other.description)) {
-           return false;
-       }
-       if (!Objects.equals(this.superPower, other.superPower)) {
-           return false;
-       }
-       if (!Objects.equals(this.organizations, other.organizations)) {
-           return false;
-       }
-       if (!Objects.equals(this.sighting, other.sighting)) {
-           return false;
-       }
-       return true;
-   }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 71 * hash + this.getSuperHeroId();
+        hash = 71 * hash + Objects.hashCode(this.getSuperHeroName());
+        hash = 71 * hash + Objects.hashCode(this.getDescription());
+        hash = 71 * hash + Objects.hashCode(this.getSuperPower());
+        hash = 71 * hash + Objects.hashCode(this.getOrganizations());
+        hash = 71 * hash + Objects.hashCode(this.getSightings());
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SuperHero other = (SuperHero) obj;
+        if (this.getSuperHeroId() != other.getSuperHeroId()) {
+            return false;
+        }
+        if (!Objects.equals(this.superHeroName, other.superHeroName)) {
+            return false;
+        }
+        if (!Objects.equals(this.description, other.description)) {
+            return false;
+        }
+        if (!Objects.equals(this.superPower, other.superPower)) {
+            return false;
+        }
+        if (!Objects.equals(this.organizations, other.organizations)) {
+            return false;
+        }
+        if (!Objects.equals(this.sighting, other.sighting)) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * @return the superHeroId
@@ -139,14 +148,14 @@ public class SuperHero {
     }
 
     /**
-     * @return the sightings
+     * @return the sighting
      */
     public List<Sighting> getSightings() {
         return sighting;
     }
 
     /**
-     * @param sightings the sightings to set
+     * @param sighting the sightings to set
      */
     public void setSightings(List<Sighting> sighting) {
         this.sighting = sighting;

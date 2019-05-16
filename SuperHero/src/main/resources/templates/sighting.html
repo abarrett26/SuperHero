@@ -44,33 +44,92 @@
                    <a href="sighting" class="btn btn-outline-primary btn-lg">Sighting</a>
                </div>
            </div>
- 
- 
- 
+           <div class="row m-4 border border-dark">
+               <div class="col-3 text-center m-3">
+                   <span class="h3">Add A Sighting</span>
+               </div>
+               <div class="col-7 text-center m-3">
+                   <form action="addSighting" method="POST">
+                       
+                       <div class="form-group row">
+                           <label for="date" class="col-3 col-form-label">
+                               Date Of Sighting</label>
+                           <div class="col-9">
+                               <input type="text" name="sighting.date" 
+                                       id="date" class="form-control"/>
+                           </div>
+                       </div>
+                       
+                       Location of Sighting:
+                       <select name="sighting.locationId" class="form-control">
+                           <option
+                                th:each="Locations : ${location}"
+                                th:value="${Locations.locationId}"
+                                th:text="${Locations.locationName}"/>      
+                       </select>
+                       <div class="form-group-row">
+                           <label for="superHero" class="col-3 col-form-label">
+                               Supers Seen:</label>
+                           <div class="col-9">
+                               <select multiple name="selectedSuperHeroIds" class="form-control">
+                           <option
+                                th:each="SuperHeros : ${superHero}"
+                                th:value="${SuperHeros.superHeroId}"
+                                th:text="${SuperHeros.superHeroName}">
+                                    
+                           </option>
+                       </select>
+                           </div>
+                       </div>
+                       <button type="submit" class="btn btn-primary">Add Sighting!!</button>
+                   </form>
+               </div>
+           </div> 
            <div class="row m-4 border border-dark">
                <div class="col text-center m-3">
                    <table class="table table-striped">
                        <thead>
                            <tr>
                                <th>ID</th>
-                               <th>Location</th>
                                <th>Date</th>
+                               <th>Location</th>
+                               <th>Edit</th>
+                               <th>Delete</th>
+                               <th>Details</th>
+                           
                            </tr>
                        </thead>
                        <tbody>
-                           <tr th:each="Sightings : ${sightings}">
+                           <tr th:each="Sightings : ${sighting}">
                                <td th:text="${Sightings.sightingId}">Sighting ID</td>
-                               <td th:text="${Sightings.Date}">Date</td>
-                               <td th:text="${Sightings.LocOfSighting.locationName}">Sighting</td>
+                               <td th:text="${Sightings.date}">Date</td>
+                               <td th:text="${Sightings.LocOfSighting.locationName}">Location</td>
+                               <td><a href="#" th:href="${'/editSighting/' + Sightings.sightingId}">Edit</a></td>
+                               <td><a href="#" th:href="@{/deleteSighting(sightingId=${Sightings.sightingId})}">Delete</a></td>
+                               <td><a href="#" th:href="@{/displaySighting(sightingId=${Sightings.sightingId})}">Details</a></td>
                            </tr>
                        </tbody>
                    </table>
                </div>
            </div>
- 
- 
-        
- 
+           <div class="row m-4 border border-dark">
+               <div class="col text-center m-3">
+                   <table class="table table-striped">
+                       <thead>
+                           <tr>
+                               <th>Sighting ID</th>
+                               <th>SuperHero ID</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           <tr th:each="SuperHeros : ${superHero}">
+                               <td th:text="${SuperHeros.superHeroId}">Sighting ID</td>
+                               <td th:text="${SuperHeros.superHeroName}">Sighting ID</td>
+                           </tr>
+                       </tbody>
+                   </table>
+               </div>
+           </div>
        </div>
  
  

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
    <head>
        <!-- Required meta tags -->
@@ -7,11 +7,13 @@
  
        <!-- Bootstrap CSS -->
        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-       <title>SuperHero</title>
+ 
+       <title>Superhero Sightings Manager</title>
    </head>
    <body>
        <!-- Main Body of Page -->
-       <div class ="col-12 m-1 text-center"
+ 
+      <div class ="col-12 m-1 text-center"
              th:if="${errors!=null && !errors.isEmpty()}">
            <p class="alert alert-danger" th:each="error: ${errors}"
                th:text="${error.message}">Error message!</p>
@@ -19,7 +21,7 @@
        <div class="container">
            <div class="row m-4">
                <div class="col text-center border border-dark">
-                   <h1><a href="/" class="text-dark">Location Page!</a></h1>
+                   <h1><a href="/" class="text-dark">SuperHero Page!</a></h1>
                </div>
            </div>
            <div class="row m-4 border border-dark">
@@ -38,103 +40,75 @@
                <div class="col text-center m-3">
                    <a href="sighting" class="btn btn-outline-primary btn-lg">Sighting</a>
                </div>
-           </div>   
+           </div>  
+ 
            <div class="row m-4 border border-dark">
                <div class="col-3 text-center m-3">
-                   <span class="h3">Add A Location!</span>
+                   <span class="h3">Edit Location</span>
                </div>
                <div class="col-7 text-center m-3">
-                   <form action="addLocation" method="POST">
+                   <form action="/editLocation" method="POST" th::object="${toEdit}">
  
+                       <div class="form-group row">
+                           <div class="col-9">
+                               <input type="hidden" name="location.locationId" 
+                                       id="locationId" class="form-control" th:value="${vm.location.locationId}"/>
+                           </div>
+                       </div>
  
                        <div class="form-group row">
                            <label for="locationName" class="col-3 col-form-label">
-                              Type your new Location Name</label>
+                               Name</label>
                            <div class="col-9">
-                               <input type="text" name="locationName" 
-                                       id="locationName" class="form-control" th:value="${locationName}"/>
+                               <input type="text" name="location.locationName" 
+                                       id="locationName" class="form-control" th:value="${vm.location.locationName}"/>
                            </div>
                        </div>
- 
+                       <a href="displayLocation.html"></a>
  
                        <div class="form-group row">
                            <label for="description" class="col-3 col-form-label">
-                             Type your new Location Description</label>
+                               Description</label>
                            <div class="col-9">
-                               <input type="text" name="description" 
-                                       id="description" class="form-control" th:value="${description}" />
+                               <input type="text" name="location.description" 
+                                       id="description" class="form-control" th:value="${vm.location.description}"/>
                            </div>
                        </div>
- 
  
                        <div class="form-group row">
                            <label for="address" class="col-3 col-form-label">
-                            Type your new Location Address</label>
+                               Address</label>
                            <div class="col-9">
-                               <input type="text" name="address" 
-                                       id="address" class="form-control" th:value="${address}" />
+                               <input type="text" name="location.address" 
+                                       id="address" class="form-control" th:value="${vm.location.address}"/>
                            </div>
                        </div>
-                       
+ 
                        <div class="form-group row">
                            <label for="lat" class="col-3 col-form-label">
-                            Type your new Location Latitude</label>
+                               Latitude</label>
                            <div class="col-9">
-                               <input type="text" name="lat" 
-                                       id="lat" class="form-control" th:value="${lat}"  />
+                               <input type="text" name="location.lat" 
+                                       id="lat" class="form-control" th:value="${vm.location.lat}"/>
                            </div>
                        </div>
-                       
+ 
                        <div class="form-group row">
                            <label for="lng" class="col-3 col-form-label">
-                            Type your new Location Longitude</label>
+                               Longitude</label>
                            <div class="col-9">
-                               <input type="text" name="lng" 
-                                       id="lng" class="form-control" th:value="${lng}"  />
+                               <input type="text" name="location.lng" 
+                                       id="lng" class="form-control" th:value="${vm.location.lng}"/>
                            </div>
                        </div>
-
-                        <button type="submit" class="btn btn-primary">Add A Location!</button>
+ 
+ 
+                       <button type="submit" class="btn btn-primary">Edit Location</button>
                    </form>
-                   </div>
-           </div>
-           <div class="row m-8 border border-dark">
-               <div class="col text-center m-3">All Locations</div>
-                   <table class="table table-striped">
-                       <thead>
-                           <tr>
-                               <th>ID</th>
-                               <th>Location Name</th>
-                               <th>Location Description</th>
-                               <th>Location Address</th>
-                               <th>Location Latitude</th>
-                               <th>Location Longitude</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           <tr th:each="Locations : ${location}">
-                               <td th:text="${Locations.locationId}">Location ID</td>
-                               <td th:text="${Locations.locationName}">Location Name</td>
-                               <td th:text="${Locations.description}">Location Description</td>
-                               <td th:text="${Locations.address}">Location Address</td>
-                               <td th:text="${Locations.lat}">Location Latitude</td>
-                               <td th:text="${Locations.lng}">Location Longitude</td>
-                               <td><a href="#" th:href="${'/editLocation/' + Locations.locationId}">Edit</a></td>
-                               <td><a href="#" th:href="@{/deleteLocation(locationId=${Locations.locationId})}">Delete</a></td>
-                               <td><a href="#" th:href="@{/displayLocation(locationId=${Locations.locationId})}">Details</a></td>
-                           </tr>
-                       </tbody>
-                   </table>
                </div>
-           </div>
+           </div>  
  
- 
- 
-                         
- 
-      
- 
- 
+       </div>
  
  
        <!-- End main body -->

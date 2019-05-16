@@ -13,67 +13,65 @@ import java.util.Objects;
  * @author alexbarrett
  */
 public class Organization {
-    
-   Integer organizationId;
-    String organizationName;
-   String description;
-    String address;
-    String phoneNumber;
-  List<SuperHero> superHeroes;
-    
-    
-    
-    public boolean hasSuper(Integer superHeroId) {
-       boolean found = false;
-       for (SuperHero toCheck : getSuperHeroes()) {
-           if (toCheck.getSuperHeroId()== superHeroId) {
-               found = true;
-               break;
-           }
-       }
-       return found;
-   }
-    
-   @Override
-   public int hashCode() {
-       int hash = 5;
-       hash = 71 * hash + this.getOrganizationId();
-       hash = 71 * hash + Objects.hashCode(this.getOrganizationName());
-       hash = 71 * hash + Objects.hashCode(this.getDescription());
-       hash = 71 * hash + Objects.hashCode(this.getAddress());
-       hash = 71 * hash + Objects.hashCode(this.getSuperHeroes());
-       return hash;
-   }
- 
-   @Override
-   public boolean equals(Object obj) {
-       if (this == obj) {
-           return true;
-       }
-       if (obj == null) {
-           return false;
-       }
-       if (getClass() != obj.getClass()) {
-           return false;
-       }
-       final Organization other = (Organization) obj;
-       if (this.getOrganizationId() != other.getOrganizationId()) {
-           return false;
-       }
-       if (!Objects.equals(this.organizationName, other.organizationName)) {
-           return false;
-       }
-       if (!Objects.equals(this.description, other.description)) {
-           return false;
-       }
-       if (!Objects.equals(this.address, other.address)) {
-           return false;
-       }
-       if (!Objects.equals(this.superHeroes, other.superHeroes)) {
-           return false;
-       }
-       return true;
-   }
+
+    private Integer organizationId;
+    private String organizationName;
+    private String description;
+    private String address;
+    private String phoneNumber;
+    private List<SuperHero> superHeroes;
+
+    public boolean hasSuperHero(Integer superHeroId) {
+        boolean found = false;
+        for (SuperHero toCheck : getSuperHeroes()) {
+            if (toCheck.getSuperHeroId() == superHeroId) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 71 * hash + this.getOrganizationId();
+        hash = 71 * hash + Objects.hashCode(this.getOrganizationName());
+        hash = 71 * hash + Objects.hashCode(this.getDescription());
+        hash = 71 * hash + Objects.hashCode(this.getAddress());
+        hash = 71 * hash + Objects.hashCode(this.getSuperHeroes());
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Organization other = (Organization) obj;
+        if (this.getOrganizationId() != other.getOrganizationId()) {
+            return false;
+        }
+        if (!Objects.equals(this.organizationName, other.organizationName)) {
+            return false;
+        }
+        if (!Objects.equals(this.description, other.description)) {
+            return false;
+        }
+        if (!Objects.equals(this.address, other.address)) {
+            return false;
+        }
+        if (!Objects.equals(this.superHeroes, other.superHeroes)) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * @return the organizationId
