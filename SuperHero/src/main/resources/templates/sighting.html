@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
    <head>
        <!-- Required meta tags -->
@@ -8,7 +8,7 @@
        <!-- Bootstrap CSS -->
        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
  
-       <title>SuperHero Sightings Manager</title>
+       <title>SuperHero</title>
    <body>
        <!-- Main Body of Page -->
  
@@ -53,30 +53,30 @@
                        
                        <div class="form-group row">
                            <label for="date" class="col-3 col-form-label">
-                               Date Of Sighting</label>
+                              Type your new Date</label>
                            <div class="col-9">
                                <input type="text" name="sighting.date" 
                                        id="date" class="form-control"/>
                            </div>
                        </div>
                        
-                       Location of Sighting:
+                       Select a Location for your new Sighting
                        <select name="sighting.locationId" class="form-control">
                            <option
                                 th:each="Locations : ${location}"
                                 th:value="${Locations.locationId}"
-                                th:text="${Locations.locationName}"/>      
+                                th:text="${Locations.locationName}">
+                           </option>
                        </select>
                        <div class="form-group-row">
                            <label for="superHero" class="col-3 col-form-label">
-                               Supers Seen:</label>
+                       Select a SuperHero for your new Sighting</label>
                            <div class="col-9">
                                <select multiple name="selectedSuperHeroIds" class="form-control">
                            <option
                                 th:each="SuperHeros : ${superHero}"
                                 th:value="${SuperHeros.superHeroId}"
-                                th:text="${SuperHeros.superHeroName}">
-                                    
+                                th:text="${SuperHeros.superHeroName}">                           
                            </option>
                        </select>
                            </div>
@@ -96,7 +96,6 @@
                                <th>Edit</th>
                                <th>Delete</th>
                                <th>Details</th>
-                           
                            </tr>
                        </thead>
                        <tbody>

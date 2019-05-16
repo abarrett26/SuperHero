@@ -13,10 +13,10 @@ import java.util.List;
  */
 public class EditSightingViewModel {
     
-   private Integer[] selectedSuperHeroIds;
-   private Sighting sighting;
-   private List<SuperHero> allSuperHeroes;
-   private List<Location> allLocations;
+    Integer[] selectedSuperHeroIds;
+    Sighting sighting;
+    List<SuperHero> allSuperHeroes;
+    List<Location> allLocations;
 
     /**
      * @return the selectedSuperHeroIds

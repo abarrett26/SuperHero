@@ -278,7 +278,7 @@ public class SHService {
         try {
             List<Sighting> allSightings = sightingDao.getAllSightings();
             validateSightingId(sightingId, allSightings);
-            validateSighting(toEdit);
+            validateEditSighting(toEdit);
             sightingDao.editSighting(toEdit);
             response.setSuccess(true);
             response.setResponseData(toEdit);
@@ -453,6 +453,16 @@ public class SHService {
         if (toEdit.getLocOfSighting().equals("")) {
             throw new InvalidLocationException("The Location name cannot be blank");
         }
+        if (toEdit.getSuperHeroes().equals("")) {
+            throw new InvalidSuperHeroPowerException("The SuperHero cannot be blank");
+        }
+    }
+    private void validateEditSighting(Sighting toEdit) throws InvalidDateException, InvalidLocationException, InvalidSuperHeroPowerException  {
+        LocalDate rightNow = LocalDate.now();
+        if (toEdit.getDate().isAfter(rightNow)) {
+            throw new InvalidDateException("The Date should be the past");
+        }
+        
         if (toEdit.getSuperHeroes().equals("")) {
             throw new InvalidSuperHeroPowerException("The SuperHero cannot be blank");
         }

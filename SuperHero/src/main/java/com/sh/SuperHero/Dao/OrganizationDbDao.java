@@ -88,6 +88,7 @@ public class OrganizationDbDao implements OrganizationDao {
                     toEdit.getDescription(),
                     toEdit.getAddress(),
                     toEdit.getPhoneNumber());
+                    toEdit.getOrganizationId();
 
             final String DELETE_SUPERHERO_ORGANIZATIONS = "DELETE FROM superHeroOrganization WHERE organizationId = ?";
             jdbc.update(DELETE_SUPERHERO_ORGANIZATIONS, toEdit.getOrganizationId());

@@ -17,13 +17,13 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 public class Sighting {
 
-    private Integer sightingId;
+    Integer sightingId;
     @PastOrPresent(message = "Date must not be in the future")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
-    private List<SuperHero> superHeroes;
-    private Integer locationId;
-    private Location LocOfSighting;
+     List<SuperHero> superHeroes;
+     Integer locationId;
+     Location LocOfSighting;
 
     public boolean hasLocation(Integer locationId) {
         boolean found = LocOfSighting.getLocationId() == locationId;
