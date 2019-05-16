@@ -49,7 +49,7 @@
                <div class="col-7 text-center m-3">
                    <form action="/editSighting" method="POST">
                        sighting
-                       <input type="hidden" name="sightings.sightingId" th:value="${vm.sighting.sightingId}">
+                       <input type="hidden" name="sighting.sightingId" th:value="${vm.sighting.sightingId}">
                        <select name="sighting.locationId" th:value="${vm.sighting.locationId}">
                            <option 
                                 th:each="location : ${vm.allLocations}"
