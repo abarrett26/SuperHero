@@ -51,7 +51,7 @@ public class SightingDbDao implements SightingDao {
     public List<Sighting> get10Sightings() throws SightingPersistenceException {
         List<Sighting> allSightings = new ArrayList<>();
         try {
-            final String SELECT_ALL_SIGHTINGS = "SELECT * FROM Sightings ORDER BY Date asc LIMIT 10";
+            final String SELECT_ALL_SIGHTINGS = "SELECT * FROM Sightings s JOIN Locations l ON s.locationId = l.locationId ORDER BY sightingId asc LIMIT 10";
             allSightings = jdbc.query(SELECT_ALL_SIGHTINGS, new SightingMapper());
             
             associateSuperHeroesToSightings(allSightings);

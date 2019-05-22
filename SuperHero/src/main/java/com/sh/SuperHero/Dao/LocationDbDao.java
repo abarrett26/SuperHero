@@ -92,9 +92,9 @@ public class LocationDbDao implements LocationDao{
     @Override
     public void deleteLocationById(Integer locationId) throws LocationPersistenceException {
         try {
-           final String DELETE_SIGHTING = "DELETE FROM Sightings "
-                   + "WHERE locationId = ?";
-           jdbc.update(DELETE_SIGHTING, locationId);
+           final String DELETE_FROM_SIGHTING = "DELETE FROM Sightings "
+                   + " WHERE locationId = ?";
+           jdbc.update(DELETE_FROM_SIGHTING, locationId);
  
            final String DELETE_LOCATION = "DELETE FROM Locations WHERE locationId = ?";
            jdbc.update(DELETE_LOCATION, locationId);

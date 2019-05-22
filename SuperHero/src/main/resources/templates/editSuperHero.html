@@ -99,43 +99,7 @@
                    </form>
                </div>
            </div> 
- 
-<!--           <div class="row m-4 border border-dark">
-               <div class="col-3 text-center m-3">
-                   <span class="h3">Edit Super</span>
-               </div>
-               <div class="col-7 text-center m-3">
-                   <form action="/editSuperHero" method="POST" th::object="${toEdit}">
-                       <input type="hidden" name="superHeroes.superHeroId" th:value="${vm.superHeroes.superHeroId}">
-                       Name: <input type="text" name="superHeroes.superHeroName" th:value="${vm.superHeroes.superHeroName}"><br>
-                       Description: <input type="text" name="superHeroes.description" th:value="${vm.superHeroes.description}"><br>
-                       Power: <input type="text" name="superHeroes.superPower" th:value="${vm.superHeroes.superPower}"><br>
-                       
-                       <div class="form-group row text-center">
-                           <label for="organization" class="col-3 col-form-label" >
-                               Organizations: </label>
-                           <div class="col-7">
-                       <select multiple name="selectedOrganizationIds">
-                           <option
-                                th:each="organization : ${vm.allOrganizations}"
-                                th:value="${organization.organizationId}"
-                                th:text="${organization.organizationName}"
-                                th:selected="${vm.superHeroes.hasOrganization(organization.organizationId)}"
-                                />
-                       </select>
-                           </div>
-                       </div>
-                      
-                       <button type="submit" class="btn btn-primary">Edit Super</button>
-                   </form>
-               </div>
 
-
-           </div>  -->
- 
-      
- 
- 
        <!-- End main body -->
  
        <!-- Optional JavaScript -->

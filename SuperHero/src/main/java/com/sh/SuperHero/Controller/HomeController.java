@@ -25,21 +25,20 @@ public class HomeController {
     @Autowired
     SHService service;
 
-    @GetMapping("/home")
+    @GetMapping({"/", "/home"})
     public String homePage(Model model) {
-
         String toReturn = "";
-
-        Response<List<Sighting>> listResponse = service.get10Sightings();
-        if (!listResponse.isSuccess()) {
-            toReturn = "error";
-        } else {
-
-            model.addAttribute("sighting", listResponse.getResponseData());
-            toReturn = "/home";
-
-        }
-        return toReturn;
-    }
+ 
+       Response<List<Sighting>> tenResponse = service.get10Sightings();
+       if (!tenResponse.isSuccess()) {
+           toReturn = "error";
+       } else {
+ 
+           model.addAttribute("sighting", tenResponse.getResponseData());
+           toReturn = "/home";
+ 
+       }
+       return toReturn;
+   }
 
 }

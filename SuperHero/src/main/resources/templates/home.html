@@ -57,7 +57,7 @@
                                <td th:text="${Sightings.sightingId}">ID</td>
                                <td th:text="${Sightings.date}">Date Of Sighting</td>
                                <td th:text="${Sightings.LocOfSighting.locationName}">Location of Sighting</td>
-                           <td><a href="#" th:href="@{/displaySighting(sightingId=${sighting.sightingId})}">Display</a></td>
+                           <td><a href="#" th:href="@{/displaySighting(sightingId=${Sightings.sightingId})}">Display</a></td>
                        </tr>
                    </tbody>
                </table>

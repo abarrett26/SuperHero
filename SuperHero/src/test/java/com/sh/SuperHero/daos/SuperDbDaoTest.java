@@ -6,7 +6,7 @@
 package com.sh.SuperHero.daos;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import com.sh.SuperHero.Dao.SightingDbDao;
+import com.sh.SuperHero.Dao.SuperDbDao;
 import java.sql.SQLException;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -20,10 +20,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
  *
  * @author alexbarrett
  */
-public class SightingDbDaoTest {
-    SightingDbDao dao;
+public class SuperDbDaoTest {
+    SuperDbDao dao;
     JdbcTemplate jdbc;
-    public SightingDbDaoTest() throws SQLException {
+    
+    public SuperDbDaoTest() throws SQLException {
        MysqlDataSource ds = new MysqlDataSource();
        ds.setServerName("localhost");
        ds.setDatabaseName("SuperHeroTest");
@@ -33,10 +34,10 @@ public class SightingDbDaoTest {
        ds.setUseSSL(false);
        ds.setAllowPublicKeyRetrieval(true);
        this.jdbc = new JdbcTemplate(ds);
-       this.dao = new SightingDbDao(jdbc);
+       this.dao = new SuperDbDao(jdbc);
  
-   
-    }
+   }
+    
     
     @BeforeClass
     public static void setUpClass() {
@@ -48,6 +49,7 @@ public class SightingDbDaoTest {
     
     @Before
     public void setUp() {
+        
     }
     
     @After
@@ -55,52 +57,45 @@ public class SightingDbDaoTest {
     }
 
     /**
-     * Test of getSightingById method, of class SightingDbDao.
+     * Test of getAllSuperHeros method, of class SuperDbDao.
      */
     @Test
-    public void testGetSightingById() throws Exception {
+    public void testGetAllSuperHeros() throws Exception {
     }
 
     /**
-     * Test of get10Sightings method, of class SightingDbDao.
+     * Test of getSuperHeroById method, of class SuperDbDao.
      */
     @Test
-    public void testGet10Sightings() throws Exception {
+    public void testGetSuperHeroById() throws Exception {
     }
 
     /**
-     * Test of getAllSightings method, of class SightingDbDao.
+     * Test of addSuperHero method, of class SuperDbDao.
      */
     @Test
-    public void testGetAllSightings() throws Exception {
+    public void testAddSuperHero() throws Exception {
     }
 
     /**
-     * Test of addSighting method, of class SightingDbDao.
+     * Test of editSuperHero method, of class SuperDbDao.
      */
     @Test
-    public void testAddSighting() throws Exception {
+    public void testEditSuperHero() throws Exception {
     }
 
     /**
-     * Test of editSighting method, of class SightingDbDao.
+     * Test of deleteSuperHeroById method, of class SuperDbDao.
      */
     @Test
-    public void testEditSighting() throws Exception {
+    public void testDeleteSuperHeroById() throws Exception {
     }
 
     /**
-     * Test of deleteSightingById method, of class SightingDbDao.
+     * Test of getOrganizationsForSuperHeroes method, of class SuperDbDao.
      */
     @Test
-    public void testDeleteSightingById() throws Exception {
-    }
-
-    /**
-     * Test of getSuperHeroesForSighting method, of class SightingDbDao.
-     */
-    @Test
-    public void testGetSuperHeroesForSighting() throws Exception {
+    public void testGetOrganizationsForSuperHeroes() throws Exception {
     }
     
 }

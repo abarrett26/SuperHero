@@ -63,10 +63,10 @@ public class SuperHeroInMemoryDao implements SuperDao {
     }
 
     @Override
-    public SuperHero getSuperHeroById(Integer id) throws SuperHeroPersistenceException {
+    public SuperHero getSuperHeroById(Integer superHeroId) throws SuperHeroPersistenceException {
         SuperHero toReturn = null;
         for (SuperHero toCheck : allSuperHeroes) {
-            if (toCheck.getSuperHeroId() == id) {
+            if (toCheck.getSuperHeroId() == superHeroId) {
                 toReturn = toCheck;
                 break;
             }
